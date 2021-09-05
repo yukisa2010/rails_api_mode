@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
     def index
-        @organizations = Organization.all
+        @organizations = Organization.all.order(:id)
         render json: @organizations
     end
 
@@ -10,13 +10,18 @@ class OrganizationsController < ApplicationController
     end
 
     def create
-        Organization.create!(
-            name: params[:name]
-        )
+        Organization.create!(organization_params)
     end
 
     def update
-        Organization.update(params[:id].to_i, name: params[:name])
+        organization = Organization.find_by(id: params[:id])
+        organization.update!(organization_params)
     end
+
+    private
+
+        def organization_params
+            params.require(:organization).permit(:name)
+        end
 
 end

@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
   resources :customers, only: [:index, :create] do
-    collection do
-      get 'search'
-    end
+      get 'search', on: :collection
   end
   resources :organizations, only: [:index, :show, :create, :update]
 end
