@@ -1,4 +1,6 @@
 class CustomersController < ApplicationController
+    before_action :authenticate_user!
+
     def index
         @customers = Customer.left_joins_organization.order(:id)
         render json: @customers, status: :ok
