@@ -2,16 +2,15 @@ class CustomersController < ApplicationController
     before_action :authenticate_user!
 
     def index
-        @customers = Customer.left_joins_organization.order(:id)
-        render json: @customers, status: :ok
+        customers = Customer.left_joins_organization.order(:id)
+        render json: customers, status: :ok
     end
 
     def search
-        @customers = Customer.left_joins_organization.order(:id)
-        @customers = @customers.where('customers.name LIKE ?', "%#{customer_params[:name]}%") if customer_params[:name].present?
-        @customers = @customers.where('customers.gender = ?', customer_params[:gender]) if customer_params[:gender].present?
-        @customers = @customers.where('customers.organization_id = ?', customer_params[:organization_id]) if customer_params[:organization_id].present?
-        render json: @customers, status: :ok
+        customers = Customer
+                        .left_joins_organization.order(:id)
+        customers = customers.search(customer_params)
+        render json: customers, status: :ok
     end
 
     def create
